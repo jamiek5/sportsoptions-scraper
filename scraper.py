@@ -84,20 +84,20 @@ def scrape(dates, sport='cbb'):
         url = urllib.request.urlopen("http://scores.sportsoptions.com/scores/" + date + "/all.html")
         soup = BeautifulSoup(url, "html.parser")
 
-        is_cbb = False
+        is_sport = False
         for current_table in soup.find_all('table'):
             if current_table.find('td', {'bgcolor': '#0172c2'}):
                 # ok we found a table that describes what the next stuff is because its blue. fuck.
                 if re.match(regex_match, current_table.text.strip('\n')):
-                    # ok, it's college basketball under here.
-                    is_cbb = True
+                    # ok, it's college basketball (or whatever) under here.
+                    is_sport = True
                     continue
                 else:
                     # its some other god damn thing probably tennis
-                    is_cbb = False
+                    is_sport = False
                     continue
 
-            elif is_cbb:
+            elif is_sport:
                 # more nested tables. find the other table. eternal nested hell tables.
                 table = current_table.find('table')
                 if table:
